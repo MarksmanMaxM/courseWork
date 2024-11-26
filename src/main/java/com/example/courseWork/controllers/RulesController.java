@@ -24,20 +24,14 @@ public class RulesController {
     }
 
 
-//       public StudentController(StudentService studentService) {
-  //          this.studentService = studentService;
- //       }
-
-
-        @GetMapping("{id}")
-        public ResponseEntity<UserRecom> getUser(@PathVariable UUID id) {
-            List<Recommendations> recommendations = userRecomService.setRecommendations();
-            UserRecom user = userRecomService.getRecom(id);
-            if(user == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(user);
+    @GetMapping("{id}")
+    public ResponseEntity<UserRecom> getUser(@PathVariable UUID id) {
+        UserRecom user = userRecomService.getRecom(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(user);
+    }
 
 
 

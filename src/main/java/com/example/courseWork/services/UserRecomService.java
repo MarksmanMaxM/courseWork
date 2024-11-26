@@ -32,7 +32,8 @@ public class UserRecomService {
                         "Быстрое рассмотрение заявки. Мы ценим ваше время, поэтому процесс рассмотрения заявки занимает всего несколько часов.\n" +
                         "Удобное оформление. Подать заявку на кредит можно онлайн на нашем сайте или в мобильном приложении.\n" +
                         "Широкий выбор кредитных продуктов. Мы предлагаем кредиты на различные цели: покупку недвижимости, автомобиля, образование, лечение и многое другое.\n" +
-                        "Не упустите возможность воспользоваться выгодными условиями кредитования от нашей компании!\n")));
+                        "Не упустите возможность воспользоваться выгодными условиями кредитования от нашей компании!\n"),
+                new Recommendations("Рекомендуемых продуктов нет", "_-_", "---------\n")));
         return recommendations;
 
     }
@@ -50,8 +51,22 @@ public class UserRecomService {
 
         }
 
+        if (rec == 2) {
+            recomed.add(recommendations.get(1));
+            UserRecom userRecom1 = new UserRecom(id, recomed);
+            userRecom = userRecom1;
+        }
+        if (rec == 3) {
+            recomed.add(recommendations.get(2));
+            UserRecom userRecom1 = new UserRecom(id, recomed);
+            userRecom = userRecom1;
+        }
+        if (rec == 0) {
+            recomed.add(recommendations.get(3));
+            UserRecom userRecom1 = new UserRecom(id, recomed);
+            userRecom = userRecom1;
+        }
         return userRecom;
-
     }
 
 }
