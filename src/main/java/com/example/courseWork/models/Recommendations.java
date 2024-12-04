@@ -1,14 +1,28 @@
 package com.example.courseWork.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import org.springframework.data.annotation.Id;
+import java.util.UUID;
+
+
+@Entity
 public class Recommendations {
+    @jakarta.persistence.Id
+    @Id
+    @GeneratedValue
+    private UUID id;
     private String name;
-    private String id;
     private String text;
 
-    public Recommendations(String name, String id, String text) {
+    public Recommendations(String name, UUID id, String text) {
         this.name = name;
         this.id = id;
         this.text = text;
+    }
+
+    public Recommendations() {
+
     }
 
     public String getName() {
@@ -19,11 +33,11 @@ public class Recommendations {
         this.name = name;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

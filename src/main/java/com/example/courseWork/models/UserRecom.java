@@ -1,8 +1,11 @@
 package com.example.courseWork.models;
 
+import org.springframework.cache.annotation.Cacheable;
+
 import java.util.List;
 import java.util.UUID;
 
+@Cacheable
 public class UserRecom {
     private UUID userId;
     private List<Recommendations> recomed;

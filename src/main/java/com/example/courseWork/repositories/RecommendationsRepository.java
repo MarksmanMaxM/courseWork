@@ -1,11 +1,14 @@
 package com.example.courseWork.repositories;
 
+import com.example.courseWork.enums.Requests;
 import com.example.courseWork.models.UserRecom;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -34,6 +37,8 @@ public class RecommendationsRepository {
         String withdraw = "WITHDRAW";
         String credit = "CREDIT";
 
+        Requests requests;
+
         Integer debitCount = 0;
         Integer investCount = 0;
         Integer savingAmount = 0;
@@ -41,13 +46,14 @@ public class RecommendationsRepository {
         Integer debitWithdrawAmount = 0;
         Integer creditCount = 0;
 
+        List<Boolean> flag = new ArrayList<>();
 
         debitCount = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM transactions t INNER JOIN products p ON t.product_id = p.id WHERE t.user_id = ? AND p.type = ? AND t.type = ?",
                 Integer.class, id, debit, deposit);
 
 
-        investCount = jdbcTemplate.queryForObject(
+        investCount = jdbcTemplate. queryForObject(
                 "SELECT COUNT(*) FROM transactions t INNER JOIN products p ON t.product_id = p.id WHERE t.user_id = ? AND p.type = ?",
                 Integer.class,
                 id, invest);
@@ -95,7 +101,72 @@ public class RecommendationsRepository {
             return 1;
 
 
-
         return 0;
     }
+
+    public boolean testRecomendation(String sqlText, UUID user, boolean negate, Requests type) {
+        Integer count = 0;
+
+/*        List<String> reqType = List.of();
+        reqType.add("USER_OF");
+        reqType.add("ACTIVE_USER_OF");*/
+/*        reqType.add("TRANSACTION_SUM_COMPARE");
+        reqType.add("TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW");*/
+
+        if (type.equals(Requests.USER_OF)) {
+            count = jdbcTemplate.queryForObject(
+                    sqlText,
+                    Integer.class, user.toString());
+            if (!negate) {
+                if (count > 0) {
+                    return true;
+                } else return false;
+            } else {
+                if (count > 0) {
+                    return false;
+                } else return true;
+            }
+        }
+
+        if (type.equals(Requests.ACTIVE_USER_OF)) {
+            count = jdbcTemplate.queryForObject(
+                    sqlText,
+                    Integer.class, user.toString());
+            if (!negate) {
+                if (count >= 5) {
+                    return true;
+                } else return false;
+            } else {
+                if (count >= 5) {
+                    return false;
+                } else return true;
+            }
+        }
+
+
+        return false;
+
+
+/*        if (reqType.get(2).equals(type)) {
+            count = jdbcTemplate.queryForObject(
+                    sqlText,
+                    Integer.class);
+            if (negate) {
+                if (count >= 5) {
+                    return true;
+                } else return false;
+            } else {
+                if (count >= 5) {
+                    return false;
+                } else return true;
+            }
+        }*/
+    }
+
+    public Integer getSqlResponse(String sqlText, UUID user) {
+        return jdbcTemplate.queryForObject(sqlText, Integer.class, user.toString());
+    }
+
+
+
 }
