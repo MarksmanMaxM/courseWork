@@ -15,6 +15,10 @@ public class UserRecom {
         this.recomed = recomed;
     }
 
+    public UserRecom() {
+
+    }
+
     public UUID getUserId() {
         return userId;
     }

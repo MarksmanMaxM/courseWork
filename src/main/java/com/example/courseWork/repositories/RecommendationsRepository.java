@@ -167,6 +167,11 @@ public class RecommendationsRepository {
         return jdbcTemplate.queryForObject(sqlText, Integer.class, user.toString());
     }
 
+    public UUID getUserIdByUsername(String username) {
+        return jdbcTemplate.queryForObject("SELECT users.id FROM users " +
+                "WHERE users.username = ?", UUID.class, username);
+    }
+
 
 
 }

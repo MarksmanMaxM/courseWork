@@ -1,10 +1,7 @@
 package com.example.courseWork.services;
 
 import com.example.courseWork.enums.Requests;
-import com.example.courseWork.models.DynamicRules;
-import com.example.courseWork.models.Query;
-import com.example.courseWork.models.Recommendations;
-import com.example.courseWork.models.UserRecom;
+import com.example.courseWork.models.*;
 import com.example.courseWork.repositories.RecommendationsRepository;
 import com.example.courseWork.repositories.RulesRepository;
 import org.springframework.stereotype.Service;
@@ -12,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.example.courseWork.enums.Requests.*;
@@ -19,14 +17,15 @@ import static com.example.courseWork.enums.Requests.*;
 @Service
 public class UserRecomService {
     private final RecommendationsRepository recommendationsRepository;
-    private final RulesRepository rulesRepository;
     private final RulesService rulesService;
+    private final CountRules countRules;
 
 
-    public UserRecomService(RecommendationsRepository recommendationsRepository, RulesRepository rulesRepository, RulesService rulesService) {
+    public UserRecomService(RecommendationsRepository recommendationsRepository,
+                            RulesRepository rulesRepository, RulesService rulesService, CountRules countRules) {
         this.recommendationsRepository = recommendationsRepository;
-        this.rulesRepository = rulesRepository;
         this.rulesService = rulesService;
+        this.countRules = countRules;
     }
 
     public List<Recommendations> setRecommendations() {
@@ -76,6 +75,16 @@ public class UserRecomService {
             recomed.add(recommendations.get(3));
             UserRecom userRecom1 = new UserRecom(id, recomed);
             userRecom = userRecom1;
+        }
+
+        for (int i = 0; i < userRecom.getRecomed().size(); i++) {
+            if (ruleCountCheck(userRecom.getRecomed().get(i).getId())) {
+                countRules.setCounts(userRecom.getRecomed().get(i).getId(),
+                        countRules.getCounts().get(userRecom.getRecomed().get(i).getId()) + 1);
+            } else {
+                countRules.setCounts(userRecom.getRecomed().get(i).getId(),
+                        1);
+            }
         }
         return userRecom;
     }
@@ -254,6 +263,16 @@ public class UserRecomService {
             }
         }
 
+        for (int i = 0; i < recs.size(); i++) {
+            if (ruleCountCheck(recs.get(i).getId())) {
+                countRules.setCounts(recs.get(i).getId(),
+                        countRules.getCounts().get(recs.get(i).getId()) + 1);
+            } else {
+                countRules.setCounts(recs.get(i).getId(),
+                        1);
+            }
+        }
+
         userRecom.setRecomed(recs);
 
         return userRecom;
@@ -290,5 +309,37 @@ public class UserRecomService {
         return sqlText;
     }
 
+    public boolean ruleCountCheck(UUID idRule) {
+
+        if (countRules.getCounts() == null) {
+            return false;
+        }
+
+        for (UUID countId : countRules.getCounts().keySet()) {
+            if (countId.equals(idRule)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getStatsRules() {
+        return countRules.toString();
+    }
+
+/*    public CountRules getAllCountRules() {
+        CountRules count = new CountRules();
+
+        for (int i = 0; i < recs.size(); i++) {
+            if (ruleCountCheck(recs.get(i).getId())) {
+                countRules.setCounts(recs.get(i).getId(),
+                        countRules.getCounts().get(recs.get(i).getId()) + 1);
+            } else {
+                countRules.setCounts(recs.get(i).getId(),
+                        1);
+            }
+
+
+    }*/
 
 }

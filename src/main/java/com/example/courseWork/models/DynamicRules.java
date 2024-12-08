@@ -26,7 +26,7 @@ public class DynamicRules {
     @JsonProperty("product_text")
     private String productText;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "query", joinColumns = @JoinColumn(name = "rule_id"))
     @JsonProperty("rule")
     private List<Query> query;
