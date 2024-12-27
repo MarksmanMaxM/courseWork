@@ -3,6 +3,7 @@ package com.example.courseWork.controllers;
 import com.example.courseWork.models.Recommendations;
 import com.example.courseWork.models.UserRecom;
 import com.example.courseWork.services.UserRecomService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class RulesController {
 
     private final UserRecomService userRecomService;
 
+    @Operation(summary = "Получение пользователя")
     @GetMapping("{id}")
     public ResponseEntity<UserRecom> getUser(@PathVariable UUID id) {
         UserRecom user;

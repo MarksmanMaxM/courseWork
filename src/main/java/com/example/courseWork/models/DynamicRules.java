@@ -1,6 +1,7 @@
 package com.example.courseWork.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class DynamicRules {
     @JsonProperty
     private Long id;
 
+    @Schema(description = "Название продукта", example = "Простой кредит")
     @JsonProperty("product_name")
     private String productName;
     @JsonProperty("product_id")
